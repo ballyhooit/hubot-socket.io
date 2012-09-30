@@ -16,28 +16,19 @@ class SocketIO extends Adapter
     super @robot
 
   send: (user, strings...) ->
-    socket = @sockets[user.id]
     for str in strings
       socket.emit 'me:message:send', {msg:str, room:'home'}
 
   reply: (user, strings...) ->
-    socket = @sockets[user.id]
     for str in strings
       socket.emit 'me:message:send', {msg:"#{user.name}: #{str}",room:'home'}
 
 
   run: ->
-    io.sockets.on 'connection', (socket) =>
-      @sockets[socket.id] = socket
-
-      socket.on 'message:send', (message) =>
-        user = @userForId socket.id, name: 'Try Hubot', room: socket.id
-        @receive new TextMessage message.nickname, message.msg
-
-      socket.on 'disconnect', =>
-        delete @sockets[socket.id]
-
-    @emit 'connected'
+    socket = io.connect process.env.BALLYCHAT_URL
+    
+    socket.on 'message:send', (message) =>
+      @receive new TextMessage message.nickname, message.msg
 
 exports.use = (robot) ->
   new SocketIO robot
