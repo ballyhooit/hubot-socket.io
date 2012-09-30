@@ -2,7 +2,7 @@
 
 port = parseInt process.env.HUBOT_SOCKETIO_PORT or 9090
 
-io = require('socket.io-client').connet process.env.BALLYCHAT_URL
+io = require('socket.io-client').connect process.env.BALLYCHAT_URL
 
 if process.env.HEROKU_URL 
   io.configure ->
