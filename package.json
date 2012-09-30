@@ -13,7 +13,7 @@
     "url" : "http://github.com/tombell/hubot-socketio.git"
   },
   "dependencies": {
-    "socket.io": "0.9.6"
+    "socket.io-client": "0.9.10"
   },
   "devDependencies": {
     "coffee-script": "1.2.0"
