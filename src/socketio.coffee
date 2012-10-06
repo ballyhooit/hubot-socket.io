@@ -22,7 +22,7 @@ class SocketIO extends Adapter
     self = @
     socket = io.connect process.env.BALLYCHAT_URL
     
-    socket.on 'connect', ->
+    socket.on 'connect', =>
       @socket = socket
       self.emit 'connected'
 
