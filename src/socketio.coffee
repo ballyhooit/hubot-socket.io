@@ -8,23 +8,25 @@ class SocketIO extends Adapter
     super @robot
 
   send: (user, strings...) ->
-    console.log('send');
     for str in strings
       @socket.emit 'me:message:send', {msg:str, room:'home'}
 
   reply: (user, strings...) ->
-    console.log('reply');
     for str in strings
       @socket.emit 'me:message:send', {msg:"#{user.name}: #{str}",room:'home'}
 
 
   run: ->
+    @conCount = 0
     self = @
     socket = io.connect process.env.BALLYCHAT_URL
     
     socket.on 'connect', =>
       @socket = socket
-      self.emit 'connected'
+      if self.conCount = 0
+        console.log 'socket.io connected'
+        self.emit 'connected'
+        self.conCount++
 
 
     socket.on 'message:send', (message) =>
