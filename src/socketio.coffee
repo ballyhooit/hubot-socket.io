@@ -9,11 +9,11 @@ class SocketIO extends Adapter
 
   send: (user, strings...) ->
     for str in strings
-      @socket.emit 'me:message:send', {msg:str, room:'home'}
+      @socket.emit process.env.BALLYCHAT_SEND_MESSAGE, {msg:str, room:'home'}
 
   reply: (user, strings...) ->
     for str in strings
-      @socket.emit 'me:message:send', {msg:"#{user.name}: #{str}",room:'home'}
+      @socket.emit process.env.BALLYCHAT_SEND_MESSAGE, {msg:"#{user.name}: #{str}",room:'home'}
 
 
   run: ->
@@ -26,9 +26,8 @@ class SocketIO extends Adapter
       self.emit 'connected'
 
 
-    socket.on 'message:send', (message) =>
+    socket.on process.env.BALLYCHAT_REC_MESSAGE, (message) =>
       @receive new TextMessage message.nickname, message.msg
-
 
 exports.use = (robot) ->
   new SocketIO robot
