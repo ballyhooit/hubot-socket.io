@@ -1,6 +1,8 @@
 {Adapter,TextMessage} = require 'hubot'
 
 io = require('socket.io-client')
+sendEvent = process.env.BALLYCHAT_SEND_MESSAGE || 'me:message:send'
+recEvent = process.env.BALLYCHAT_REC_MESSAGE || 'message:send'
 
 class SocketIO extends Adapter
 
@@ -9,11 +11,11 @@ class SocketIO extends Adapter
 
   send: (user, strings...) ->
     for str in strings
-      @socket.emit process.env.BALLYCHAT_SEND_MESSAGE, {msg:str, room:'home'}
+      @socket.emit sendEvent, {msg:str, room:'home'}
 
   reply: (user, strings...) ->
     for str in strings
-      @socket.emit process.env.BALLYCHAT_SEND_MESSAGE, {msg:"#{user.name}: #{str}",room:'home'}
+      @socket.emit sendEvent, {msg:"#{user.name}: #{str}",room:'home'}
 
 
   run: ->
@@ -26,7 +28,7 @@ class SocketIO extends Adapter
       self.emit 'connected'
 
 
-    socket.on process.env.BALLYCHAT_REC_MESSAGE, (message) =>
+    socket.on recEvent, (message) =>
       @receive new TextMessage message.nickname, message.msg
 
 exports.use = (robot) ->
