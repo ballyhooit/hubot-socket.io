@@ -29,7 +29,7 @@ class SocketIO extends Adapter
 
 
     socket.on recEvent, (message) =>
-      @receive new TextMessage message.nickname, message.msg
+      @receive new TextMessage message.nickname, message.msg unless message.nickname = self.robot.name
 
 exports.use = (robot) ->
   new SocketIO robot
