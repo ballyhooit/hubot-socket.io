@@ -1,8 +1,10 @@
 {Adapter,TextMessage} = require 'hubot'
 
+nconf.env().file 'config.json'
 io = require('socket.io-client')
-sendEvent = process.env.BALLYCHAT_SEND_MESSAGE || 'me:message:send'
-recEvent = process.env.BALLYCHAT_REC_MESSAGE || 'message:send'
+sendEvent = nconf.get 'BALLYCHAT_SEND_MESSAGE' || 'message:post'
+recEvent = nconf.get 'BALLYCHAT_REC_MESSAGE' || 'message:get'
+joinEvent = nconf.get 'BALLYCHAT_JOIN' || 'join:request'
 
 class SocketIO extends Adapter
 
@@ -20,7 +22,7 @@ class SocketIO extends Adapter
 
   run: ->
     self = @
-    socket = io.connect process.env.BALLYCHAT_URL
+    socket = io.connect nconf.get 'BALLYCHAT_URL' 
     
     socket.on 'connect', =>
       @socket = socket
